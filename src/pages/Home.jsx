@@ -7,6 +7,7 @@ class Home extends React.Component {
   state = {
     categories: [],
     results: [],
+    cartProducts: [],
     inputValue: '',
     chosenCategory: '',
   };
@@ -36,7 +37,8 @@ class Home extends React.Component {
     }, this.renderCategoryProducts);
   };
 
-  renderSearchProducts = async () => {
+  renderSearchProducts = async (event) => {
+    event.preventDefault();
     const { inputValue } = this.state;
     const { results } = await api.getProductsFromCategoryAndQuery('', inputValue);
     this.setState({
@@ -52,15 +54,21 @@ class Home extends React.Component {
     });
   };
 
+  addToCart = (product, prevState) => {
+    this.setState({
+      cartProducts: [...prevState, product],
+    });
+  };
+
   render() {
-    const { categories, results, inputValue } = this.state;
+    const { categories, results, inputValue, cartProducts } = this.state;
 
     return (
       <div>
         <h1 data-testid="home-initial-message">
           Digite algum termo de pesquisa ou escolha uma categoria.
         </h1>
-        <form>
+        <form onSubmit={ this.renderSearchProducts }>
           <input
             type="text"
             name="inputValue"
@@ -70,14 +78,20 @@ class Home extends React.Component {
             onChange={ this.onSearch }
           />
           <button
-            type="button"
+            type="submit"
             data-testid="query-button"
-            onClick={ this.renderSearchProducts }
           >
             Pesquisar
           </button>
         </form>
-        <Link to="/Cart">
+        <Link
+          to={ {
+            pathname: '/Cart',
+            state: {
+              cartProducts,
+            },
+          } }
+        >
           <button
             type="button"
             data-testid="shopping-cart-button"
@@ -110,7 +124,17 @@ class Home extends React.Component {
           {/* { results[0] === '' ? '' : results.length !== 0 ? results */}
           { results.length !== 0 ? results
             .map((product) => (
-              <ProductCard product={ product } key={ product.id } />
+              <div key={ product.id }>
+                <ProductCard product={ product } />
+                <button
+                  data-testid="product-add-to-cart"
+                  type="button"
+                  onClick={ () => this.addToCart(product, cartProducts) }
+                >
+                  Adicionar ao Carrinho
+                </button>
+              </div>
+
             )) : 'Nenhum produto foi encontrado'}
         </div>
       </div>

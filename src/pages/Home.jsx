@@ -86,6 +86,7 @@ class Home extends React.Component {
         </div>
 
         <div>
+          {/* { results[0] === '' ? '' : results.length !== 0 ? results */}
           { results.length !== 0 ? results
             .map((product) => (
               <div

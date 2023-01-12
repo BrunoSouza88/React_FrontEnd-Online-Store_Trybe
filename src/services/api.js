@@ -18,10 +18,3 @@ export async function getProductById(productId) {
   const response = await request.json();
   return response;
 }
-
-// const teste = async () => {
-//   const teste2 = await getProductById('MLB2623871064');
-//   console.log(teste2);
-// };
-
-// teste();

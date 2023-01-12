@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import ProductCard from './ProductCard';
 import * as api from '../services/api';
 
 class Home extends React.Component {
@@ -109,14 +110,7 @@ class Home extends React.Component {
           {/* { results[0] === '' ? '' : results.length !== 0 ? results */}
           { results.length !== 0 ? results
             .map((product) => (
-              <div
-                data-testid="product"
-                key={ product.id }
-              >
-                <p>{product.title}</p>
-                <img src={ product.thumbnail } alt={ product.name } />
-                <p>{`R$ ${product.price.toFixed(2)}`}</p>
-              </div>
+              <ProductCard product={ product } key={ product.id } />
             )) : 'Nenhum produto foi encontrado'}
         </div>
       </div>

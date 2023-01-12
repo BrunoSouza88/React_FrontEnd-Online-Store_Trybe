@@ -7,6 +7,7 @@ class Home extends React.Component {
     categories: [],
     results: [],
     inputValue: '',
+    chosenCategory: '',
   };
 
   componentDidMount() {
@@ -20,15 +21,31 @@ class Home extends React.Component {
     });
   };
 
-  onType = (event) => {
+  onSearch = (event) => {
+    const { name, value } = event.target;
     this.setState({
-      inputValue: event.target.value,
+      [name]: value,
     });
   };
 
-  onSearch = async () => {
+  onCategory = (event) => {
+    const { name, value } = event.target;
+    this.setState({
+      [name]: value,
+    }, this.renderCategoryProducts);
+  };
+
+  renderSearchProducts = async () => {
     const { inputValue } = this.state;
     const { results } = await api.getProductsFromCategoryAndQuery('', inputValue);
+    this.setState({
+      results,
+    });
+  };
+
+  renderCategoryProducts = async () => {
+    const { chosenCategory } = this.state;
+    const { results } = await api.getProductsFromCategoryAndQuery(chosenCategory);
     this.setState({
       results,
     });
@@ -49,12 +66,12 @@ class Home extends React.Component {
             id="inputValue"
             data-testid="query-input"
             value={ inputValue }
-            onChange={ this.onType }
+            onChange={ this.onSearch }
           />
           <button
             type="button"
             data-testid="query-button"
-            onClick={ this.onSearch }
+            onClick={ this.renderSearchProducts }
           >
             Pesquisar
           </button>
@@ -78,6 +95,9 @@ class Home extends React.Component {
                   type="button"
                   data-testid="category"
                   key={ category.id }
+                  value={ category.id }
+                  name="chosenCategory"
+                  onClick={ this.onCategory }
                 >
                   {category.name}
                 </button>

@@ -8,10 +8,10 @@ class Home extends React.Component {
   };
 
   componentDidMount() {
-    this.qualquerUm();
+    this.handleCategories();
   }
 
-  qualquerUm = async () => {
+  handleCategories = async () => {
     const categories = await api.getCategories();
     console.log(categories);
     this.setState({

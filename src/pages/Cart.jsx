@@ -1,10 +1,9 @@
 import React from 'react';
-import { useLocation } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import CartProductCard from './CartProductCard';
 
-function Cart() {
-  const location = useLocation();
-  const { cartProducts } = location.state;
+function Cart(props) {
+  const { cartProducts } = props;
   return (
     <div>
       { cartProducts.length !== 0 ? cartProducts
@@ -30,3 +29,17 @@ function Cart() {
 }
 
 export default Cart;
+
+Cart.propTypes = {
+  cartProducts: PropTypes.arrayOf(PropTypes.shape({
+    product: PropTypes.shape({
+      title: PropTypes.string,
+      thumbnail: PropTypes.string,
+      price: PropTypes.number,
+    }),
+  })),
+};
+
+Cart.defaultProps = {
+  cartProducts: [],
+};

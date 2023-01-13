@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import ProductCard from './ProductCard';
 import * as api from '../services/api';
 
@@ -7,7 +8,6 @@ class Home extends React.Component {
   state = {
     categories: [],
     results: [],
-    cartProducts: [],
     inputValue: '',
     chosenCategory: '',
   };
@@ -54,14 +54,29 @@ class Home extends React.Component {
     });
   };
 
-  addToCart = (product, prevState) => {
-    this.setState({
-      cartProducts: [...prevState, product],
-    });
-  };
+  // // Modificado de https://www.w3resource.com/javascript-exercises/fundamental/javascript-fundamental-exercise-70.php
+  // countOccurrences = (arr, val) => arr.reduce((a, v) => (v['id'] === val['id'] ? a + 1 : a), 0);
+
+  // addToCart = (product, prevState) => {
+  //   // console.log(prevState.some((cartProduct) => cartProduct.id === product.id));
+  //   // if (!prevState.some((cartProduct) => cartProduct.id === product.id)) {
+  //   //   this.setState({
+  //   //     cartProducts: [...prevState, { product, quantity: 1 }],
+  //   //   });
+  //   // }
+
+  //   if (this.countOccurrences(prevState, product) > 0) {
+  //     // quantity={ cartProducts.filter((xablau) => product.id === xablau.id).length }
+  //   } else {
+  //     this.setState({
+  //       cartProducts: [...prevState, { product, quantity: 1 }],
+  //     });
+  //   }
+  // }
 
   render() {
-    const { categories, results, inputValue, cartProducts } = this.state;
+    const { categories, results, inputValue } = this.state;
+    const { cartProducts, addToCart } = this.props;
 
     return (
       <div>
@@ -87,9 +102,6 @@ class Home extends React.Component {
         <Link
           to={ {
             pathname: '/Cart',
-            state: {
-              cartProducts,
-            },
           } }
         >
           <button
@@ -129,7 +141,7 @@ class Home extends React.Component {
                 <button
                   data-testid="product-add-to-cart"
                   type="button"
-                  onClick={ () => this.addToCart(product, cartProducts) }
+                  onClick={ () => addToCart(product, cartProducts) }
                 >
                   Adicionar ao Carrinho
                 </button>
@@ -143,3 +155,18 @@ class Home extends React.Component {
 }
 
 export default Home;
+
+Home.propTypes = {
+  addToCart: PropTypes.func.isRequired,
+  cartProducts: PropTypes.arrayOf(PropTypes.shape({
+    product: PropTypes.shape({
+      title: PropTypes.string,
+      thumbnail: PropTypes.string,
+      price: PropTypes.number,
+    }),
+  })),
+};
+
+Home.defaultProps = {
+  cartProducts: [],
+};

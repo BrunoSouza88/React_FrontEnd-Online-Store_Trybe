@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import CartProductCard from './CartProductCard';
 
 function Cart(props) {
-  const { cartProducts } = props;
+  const { addToCart, removeFromCart, deleteFromCart, cartProducts } = props;
   return (
     <div>
       { cartProducts.length !== 0 ? cartProducts
@@ -11,17 +11,11 @@ function Cart(props) {
           <div key={ product.id }>
             <CartProductCard
               product={ product }
-              quantity={ cartProducts
-                .filter((xablau) => product.id === xablau.id).length }
+              cartProducts={ cartProducts }
+              addToCart={ addToCart }
+              removeFromCart={ removeFromCart }
+              deleteFromCart={ deleteFromCart }
             />
-
-            {/* <button
-              data-testid="product-add-to-cart"
-              type="button"
-              onClick={ () => this.addToCart(product, cartProducts) }
-            >
-              Adicionar ao Carrinho
-            </button> */}
           </div>
         )) : <p data-testid="shopping-cart-empty-message">Seu carrinho está vazio</p>}
     </div>
@@ -31,6 +25,9 @@ function Cart(props) {
 export default Cart;
 
 Cart.propTypes = {
+  addToCart: PropTypes.func.isRequired,
+  removeFromCart: PropTypes.func.isRequired,
+  deleteFromCart: PropTypes.func.isRequired,
   cartProducts: PropTypes.arrayOf(PropTypes.shape({
     product: PropTypes.shape({
       title: PropTypes.string,

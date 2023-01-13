@@ -10,10 +10,64 @@ class App extends React.Component {
     cartProducts: [],
   };
 
+  componentDidMount() {
+    if (localStorage.cart) {
+      const cart = localStorage.getItem('cart');
+      const newState = JSON.parse(cart);
+      this.setState({
+        cartProducts: newState,
+      });
+    }
+  }
+
+  // handleCart
+
   addToCart = (product, prevState) => {
+    if (prevState.some((cartProduct) => cartProduct.id === product.id)) {
+      const index = prevState
+        .indexOf(prevState
+          .find((cartProduct) => cartProduct.id === product.id));
+      const newState = prevState;
+      newState[index].quantity += 1;
+      this.setState({
+        cartProducts: newState,
+      });
+      localStorage.setItem('cart', JSON.stringify(newState));
+    } else {
+      this.setState({
+        cartProducts: [...prevState, { ...product, quantity: 1 }],
+      });
+      localStorage.setItem(
+        'cart',
+        JSON.stringify([...prevState, { ...product, quantity: 1 }]),
+      );
+    }
+  };
+
+  removeFromCart = (product, prevState) => {
+    const index = prevState
+      .indexOf(prevState
+        .find((cartProduct) => cartProduct.id === product.id));
+    const newState = prevState;
+    if (newState[index].quantity > 1) {
+      newState[index].quantity -= 1;
+    }
     this.setState({
-      cartProducts: [...prevState, product],
+      cartProducts: newState,
     });
+    localStorage.setItem('cart', JSON.stringify(newState));
+  };
+
+  deleteFromCart = (product, prevState) => {
+    const index = prevState
+      .indexOf(prevState
+        .find((cartProduct) => cartProduct.id === product.id));
+    const newState = prevState;
+    newState.splice(index, 1);
+    this.setState({
+      cartProducts: newState,
+    });
+    localStorage.setItem('cart', JSON.stringify(newState));
   };
 
   render() {
@@ -25,7 +79,12 @@ class App extends React.Component {
             <Home addToCart={ this.addToCart } cartProducts={ cartProducts } />
           </Route>
           <Route exact path="/cart">
-            <Cart cartProducts={ cartProducts } />
+            <Cart
+              addToCart={ this.addToCart }
+              removeFromCart={ this.removeFromCart }
+              deleteFromCart={ this.deleteFromCart }
+              cartProducts={ cartProducts }
+            />
           </Route>
           <Route exact path="/product">
             <Product addToCart={ this.addToCart } cartProducts={ cartProducts } />

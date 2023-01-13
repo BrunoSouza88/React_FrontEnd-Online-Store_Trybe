@@ -3,10 +3,6 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 export default class ProductCard extends Component {
-  // addToCart = () => {
-  //   console.log('xablau');
-  // };
-
   render() {
     const { product } = this.props;
     return (
@@ -30,13 +26,6 @@ export default class ProductCard extends Component {
             <p>{`R$ ${product.price.toFixed(2)}`}</p>
           </button>
         </Link>
-        {/* <button
-          data-testid="product-add-to-cart"
-          type="button"
-          onClick={ this.addToCart }
-        >
-          Adicionar ao Carrinho
-        </button> */}
       </div>
     );
   }

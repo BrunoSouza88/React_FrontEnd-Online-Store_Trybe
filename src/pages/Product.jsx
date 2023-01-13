@@ -3,17 +3,10 @@ import PropTypes from 'prop-types';
 import { useLocation, Link } from 'react-router-dom';
 
 function Product(props) {
-  // const [cartProducts, setCartProducts] = useState([]);
-
-  // addToCart = (product, prevState) => {
-  //   setState({
-  //     cartProducts: [...prevState, product],
-  //   });
-  // };
-
   const location = useLocation();
   const { product } = location.state;
   const { addToCart, cartProducts } = props;
+  console.log(props);
   return (
     <div>
       <p data-testid="product-detail-name">{product.title}</p>

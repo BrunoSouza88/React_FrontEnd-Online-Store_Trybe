@@ -48,31 +48,11 @@ class Home extends React.Component {
 
   renderCategoryProducts = async () => {
     const { chosenCategory } = this.state;
-    const { results } = await api.getProductsFromCategoryAndQuery(chosenCategory);
+    const { results } = await api.getProductsFromCategoryAndQuery(chosenCategory, '');
     this.setState({
       results,
     });
   };
-
-  // // Modificado de https://www.w3resource.com/javascript-exercises/fundamental/javascript-fundamental-exercise-70.php
-  // countOccurrences = (arr, val) => arr.reduce((a, v) => (v['id'] === val['id'] ? a + 1 : a), 0);
-
-  // addToCart = (product, prevState) => {
-  //   // console.log(prevState.some((cartProduct) => cartProduct.id === product.id));
-  //   // if (!prevState.some((cartProduct) => cartProduct.id === product.id)) {
-  //   //   this.setState({
-  //   //     cartProducts: [...prevState, { product, quantity: 1 }],
-  //   //   });
-  //   // }
-
-  //   if (this.countOccurrences(prevState, product) > 0) {
-  //     // quantity={ cartProducts.filter((xablau) => product.id === xablau.id).length }
-  //   } else {
-  //     this.setState({
-  //       cartProducts: [...prevState, { product, quantity: 1 }],
-  //     });
-  //   }
-  // }
 
   render() {
     const { categories, results, inputValue } = this.state;
